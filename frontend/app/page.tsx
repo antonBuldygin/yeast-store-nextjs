@@ -1,4 +1,13 @@
-export default function Home() {
+import { Product } from "@/types/product";
+import Link from "next/link";
+
+export default async function Home() {
+  const productsResponse = await fetch("http://localhost:3000/json/data.json", {
+    method: "GET",
+  });
+
+  const products = await productsResponse.json() as Product[];
+
   return <>
     <section className="hero-banner">
       <img src="/img/background/hopfen-fields.jpg" alt="Beautiful hops on a dark background" className="hero-banner__image" />
@@ -7,11 +16,6 @@ export default function Home() {
 
     <div className="container main-content-grid">
       <aside className="sidebar filter-menu">
-        <div className="sidebar__section">
-          <h3 className="section-title">Keywords</h3>
-          <div className="keywords-list"></div>
-        </div>
-
         <div className="sidebar__section">
           <h3 className="section-title">Product Type</h3>
           <div className="checkbox-group">
@@ -44,16 +48,28 @@ export default function Home() {
             </button>
           </div>
           <div className="sort-options">
-            <button className="sort-button active-sort">
-              <span>New</span>
-            </button>
+            <button className="sort-button active-sort">New</button>
             <button className="sort-button">Price ascending</button>
             <button className="sort-button">Price descending</button>
             <button className="sort-button">Rating</button>
           </div>
         </div>
 
-        <div className="product-grid"></div>
+        <div className="product-grid">
+          {products.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="product-card-link">
+            <div className="product-card">
+              <img src={p.image} alt="Blanche Malt" className="product-card__image" />
+              <div className="product-card__info">
+                <h4 className="product-card__name">{p.name}</h4>
+                <p className="product-card__price">{new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: p.price.currency,
+                }).format(p.price.value)}</p>
+                <p className="product-card__description">{p.tagline}</p>
+              </div>
+            </div>
+          </Link>)}
+        </div>
       </section>
     </div>
   </>;
