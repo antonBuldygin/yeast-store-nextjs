@@ -1,6 +1,7 @@
 import { Product, ProductType } from "@/types/product";
 import Link from "next/link";
 import CheckboxFilter from "./components/filters/checkbox/checkbox";
+import SortButton from "./components/filters/sort/sort";
 
 export enum SearchParam {
   PRODUCT_TYPE = "product-type[]",
@@ -15,6 +16,22 @@ export const ProductTypeName: readonly [ProductType, string][] = Object.freeze([
   [ProductType.ADJUNCT, "Adjunct"],
 ]);
 
+enum SortDirection {
+  NEW = "new",
+  PRICE_ASC = "price.asc",
+  PRICE_DESC = "price.desc",
+  RATING = "rating",
+}
+
+const SortDirectionName: readonly [SortDirection, string][] = Object.freeze([
+  [SortDirection.NEW, "New"],
+  [SortDirection.PRICE_ASC, "Price ascending"],
+  [SortDirection.PRICE_DESC, "Price descending"],
+  [SortDirection.RATING, "Rating"],
+]);
+
+const DEFAULT_SORT_DIRECTION = SortDirection.NEW;
+
 export default async function Home({ searchParams }: PageProps<"/">) {
   const searchValues = await searchParams;
 
@@ -22,13 +39,36 @@ export default async function Home({ searchParams }: PageProps<"/">) {
     method: "GET",
   });
   const products = await productsResponse.json() as Product[];
-  const filteredProducts = products.filter(function (p) {
-    if (SearchParam.PRODUCT_TYPE in searchValues) {
-      return searchValues[SearchParam.PRODUCT_TYPE]!.includes(p.type);
-    }
 
-    return true;
-  });
+  const sortDirection = searchValues[SearchParam.SORT] ?? DEFAULT_SORT_DIRECTION;
+
+  const filteredProducts = products
+    .filter(function (p) {
+      if (SearchParam.PRODUCT_TYPE in searchValues) {
+        return searchValues[SearchParam.PRODUCT_TYPE]!.includes(p.type);
+      }
+
+      return true;
+    })
+    .sort(function (a, b) {
+      if (sortDirection === DEFAULT_SORT_DIRECTION) {
+        return 0;
+      }
+
+      if (sortDirection === SortDirection.PRICE_ASC) {
+        return a.price.value - b.price.value;
+      }
+
+      if (sortDirection === SortDirection.PRICE_DESC) {
+        return b.price.value - a.price.value;
+      }
+
+      if (sortDirection === SortDirection.RATING) {
+        return b.rating - a.rating;
+      }
+
+      return 0;
+    });
 
   return <>
     <section className="hero-banner">
@@ -59,12 +99,15 @@ export default async function Home({ searchParams }: PageProps<"/">) {
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
-          <div className="sort-options">
-            <button className="sort-button active-sort">New</button>
-            <button className="sort-button">Price ascending</button>
-            <button className="sort-button">Price descending</button>
-            <button className="sort-button">Rating</button>
-          </div>
+          <div className="sort-options">{
+            SortDirectionName.map(([k, v]) => <SortButton
+              key={`sort-direction-control-${k}`}
+              name={SearchParam.SORT}
+              isDefault={k === DEFAULT_SORT_DIRECTION}
+              value={k}
+              label={v}
+            />)
+          }</div>
         </div>
 
         <div className="product-grid">

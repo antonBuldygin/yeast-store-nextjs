@@ -15,4 +15,5 @@ export interface Product {
   },
   tagline: string,
   type: ProductType,
+  rating: number,
 }
