@@ -63,7 +63,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         <div className="product-grid">
           {filteredProducts.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="product-card-link">
             <div className="product-card">
-              <img src={p.image} alt="Blanche Malt" className="product-card__image" />
+              <img src={p.image} alt={p.name} className="product-card__image" />
               <div className="product-card__info">
                 <h4 className="product-card__name">{p.name}</h4>
                 <p className="product-card__price">{new Intl.NumberFormat("en-US", {
