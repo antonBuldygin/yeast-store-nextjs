@@ -1,12 +1,27 @@
-import { Product } from "@/types/product";
+import { Product, ProductTypeName } from "@/types/product";
 import Link from "next/link";
+import CheckboxFilter from "./components/filters/checkbox/checkbox";
 
-export default async function Home() {
+export enum SearchParam {
+  PRODUCT_TYPE = "product-type[]",
+  SEARCH = "search",
+  SORT = "sort",
+}
+
+export default async function Home({ searchParams }: PageProps<"/">) {
+  const searchValues = await searchParams;
+
   const productsResponse = await fetch("http://localhost:3000/json/data.json", {
     method: "GET",
   });
-
   const products = await productsResponse.json() as Product[];
+  const filteredProducts = products.filter(function(p) {
+    if (SearchParam.PRODUCT_TYPE in searchValues) {
+      return searchValues[SearchParam.PRODUCT_TYPE]!.includes(p.type);
+    }
+
+    return true;
+  });
 
   return <>
     <section className="hero-banner">
@@ -18,24 +33,14 @@ export default async function Home() {
       <aside className="sidebar filter-menu">
         <div className="sidebar__section">
           <h3 className="section-title">Product Type</h3>
-          <div className="checkbox-group">
-            <label className="checkbox-container">Hops
-              <input type="checkbox" data-keyword="Hops" />
-              <span className="checkmark"></span>
-            </label>
-            <label className="checkbox-container">Malts
-              <input type="checkbox" data-keyword="Malts" />
-              <span className="checkmark"></span>
-            </label>
-            <label className="checkbox-container">Yeast
-              <input type="checkbox" data-keyword="Yeast" />
-              <span className="checkmark"></span>
-            </label>
-            <label className="checkbox-container">Adjuncts
-              <input type="checkbox" data-keyword="Adjuncts" />
-              <span className="checkmark"></span>
-            </label>
-          </div>
+          <div className="checkbox-group">{
+            ProductTypeName.map(([k, v]) => <CheckboxFilter
+              key={`filter-product-type-${k}`}
+              name={SearchParam.PRODUCT_TYPE}
+              value={k}
+              label={v}
+            />)
+          }</div>
         </div>
       </aside>
 
@@ -56,7 +61,7 @@ export default async function Home() {
         </div>
 
         <div className="product-grid">
-          {products.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="product-card-link">
+          {filteredProducts.map((p) => <Link key={p.id} href={`/products/${p.id}`} className="product-card-link">
             <div className="product-card">
               <img src={p.image} alt="Blanche Malt" className="product-card__image" />
               <div className="product-card__info">
