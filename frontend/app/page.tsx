@@ -3,6 +3,7 @@ import Link from "next/link";
 import CheckboxFilter from "./components/filters/checkbox/checkbox";
 import SortButton from "./components/filters/sort/sort";
 import SearchInput from "./components/filters/search/search";
+import SearchInputInstant from "./components/filters/search/search-instant";
 
 export enum SearchParam {
   PRODUCT_TYPE = "product-type[]",
@@ -108,7 +109,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
 
       <section className="products-area product-grid-section">
         <div className="search-sort-bar">
-          <SearchInput name={SearchParam.SEARCH} />
+          <SearchInputInstant name={SearchParam.SEARCH} />
           <div className="sort-options">{
             SortDirectionName.map(([k, v]) => <SortButton
               key={`sort-direction-control-${k}`}

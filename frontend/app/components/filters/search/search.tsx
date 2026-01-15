@@ -7,6 +7,11 @@ interface SearchInputProps {
   name: string,
 }
 
+// Product page
+// Filters
+// 1. immediate response
+// 2. hook
+
 export default function SearchInput({ name }: SearchInputProps) {
   const router = useRouter();
   const pathname = usePathname();
