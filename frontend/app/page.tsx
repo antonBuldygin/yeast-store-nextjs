@@ -2,7 +2,6 @@ import { Product, ProductType } from "@/types/product";
 import Link from "next/link";
 import CheckboxFilter from "./components/filters/checkbox/checkbox";
 import SortButton from "./components/filters/sort/sort";
-import SearchInput from "./components/filters/search/search";
 import SearchInputInstant from "./components/filters/search/search-instant";
 
 export enum SearchParam {
