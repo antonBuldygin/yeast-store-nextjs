@@ -44,9 +44,9 @@ export default async function RootLayout({
             {
               isUserSignedIn
                 ? <div className="header__user-actions" id="auth-user">
-                  <a href="account.html" className="user-icon" aria-label="My Account">
+                  <Link href="/account" className="user-icon" aria-label="My Account">
                     <img src="/img/icons/User_alt.svg" alt="User Account" />
-                  </a>
+                  </Link>
                   <a href="cart.html" className="cart-icon" aria-label="Shopping Cart">
                     <img src="/img/icons/Shopping_bag.svg" alt="Shopping Cart" />
                   </a>
