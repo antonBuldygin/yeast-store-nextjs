@@ -1,3 +1,4 @@
+import signOut from "@/actions/user/sign-out";
 import TabsPanel from "./components/tabs/tabs";
 
 function OrderHistory() {
@@ -115,33 +116,42 @@ function OrderHistory() {
 }
 
 function AccountForm() {
-  return <div className="account-form-container">
-    <h2 className="account-form-title">Personal Info</h2>
-    <form id="account-info-form">
-      <div className="checkout-form-group">
-        <label htmlFor="acc-full-name">Full Name</label>
-        <input type="text" id="acc-full-name" name="full_name" className="Input" placeholder="Value" required />
-      </div>
-      <div className="checkout-form-group">
-        <label htmlFor="acc-phone">Phone number</label>
-        <input type="tel" id="acc-phone" name="phone" className="Input" placeholder="Value" required />
-      </div>
-      <div className="checkout-form-group">
-        <label htmlFor="acc-email">Email</label>
-        <input type="email" id="acc-email" name="email" className="Input" placeholder="example@mail.com" required />
-      </div>
-      <div className="checkout-form-group">
-        <label htmlFor="acc-city">City</label>
-        <input type="text" id="acc-city" name="city" className="Input" placeholder="Value" required />
-      </div>
-      <div className="checkout-form-group">
-        <label htmlFor="acc-address">Shipping address</label>
-        <textarea id="acc-address" name="address" className="Textarea" placeholder="Value" rows={3} required></textarea>
-      </div>
-      <button type="submit" className="button button--primary button--full-width">Save</button>
-      <a href="#" className="button button--secondary button--full-width" id="logout-button">Logout</a>
-    </form>
-  </div>;
+  return <>
+    <div className="account-form-container">
+      <h2 className="account-form-title">Personal Info</h2>
+      <form id="account-info-form">
+        <div className="checkout-form-group">
+          <label htmlFor="acc-full-name">Full Name</label>
+          <input type="text" id="acc-full-name" name="full_name" className="Input" placeholder="Value" required />
+        </div>
+        <div className="checkout-form-group">
+          <label htmlFor="acc-phone">Phone number</label>
+          <input type="tel" id="acc-phone" name="phone" className="Input" placeholder="Value" required />
+        </div>
+        <div className="checkout-form-group">
+          <label htmlFor="acc-email">Email</label>
+          <input type="email" id="acc-email" name="email" className="Input" placeholder="example@mail.com" required />
+        </div>
+        <div className="checkout-form-group">
+          <label htmlFor="acc-city">City</label>
+          <input type="text" id="acc-city" name="city" className="Input" placeholder="Value" required />
+        </div>
+        <div className="checkout-form-group">
+          <label htmlFor="acc-address">Shipping address</label>
+          <textarea id="acc-address" name="address" className="Textarea" placeholder="Value" rows={3} required></textarea>
+        </div>
+        <button type="submit" name="action" value="save" className="button button--primary button--full-width">Save</button>
+      </form>
+    </div>
+
+    <div className="account-form-container" style={{
+      marginTop: "20px",
+    }}>
+      <form action={signOut}>
+        <button type="submit" name="action" value="logout" className="button button--secondary button--full-width" id="logout-button">Logout</button>
+      </form>
+    </div>
+  </>;
 }
 
 export default function Page() {
