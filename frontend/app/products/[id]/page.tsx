@@ -9,7 +9,7 @@ async function addToCart(formData: FormData) {
   const productID = formData.get("add-product") as string;
 
   if (productID === null) {
-    return null;
+    return;
   }
 
   const isUserSignedIn = await isSignedIn();
