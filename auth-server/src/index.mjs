@@ -34,9 +34,9 @@ app.post("/signin", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const userIndex = await db.getIndex("/users/", req.body.username, "username");
+  const userIndex = await db.getIndex("/users", req.body.username, "username");
 
-  if (userIndex === -1) {
+  if (userIndex !== -1) {
     return res.status(400).send("User already exists");
   }
 
