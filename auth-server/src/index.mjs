@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", async (req, res) => {
-  const user = getUser(req.body.username);
+  const user = getUser(db, req.body.username);
 
   if (user === undefined) {
     return res.sendStatus(404);
@@ -37,7 +37,7 @@ app.post("/signin", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const user = getUser(req.body.username);
+  const user = getUser(db, req.body.username);
 
   if (user !== undefined) {
     return res.status(400).send("User already exists");
