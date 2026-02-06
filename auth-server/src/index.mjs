@@ -1,6 +1,7 @@
 import { JsonDB, Config } from 'node-json-db';
 import express, { json } from "express";
 import bcrypt from "bcrypt";
+import { v6 as uuidv6 } from "uuid";
 import cors from "cors";
 
 const port = process.env.PORT ?? 5391;
@@ -43,7 +44,7 @@ app.post("/signup", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
   await db.push("/users[]", {
-    id: `${Math.random()}`,
+    id: uuidv6(),
     username: req.body.username,
     password: hashedPassword,
   });
